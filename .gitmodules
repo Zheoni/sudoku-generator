@@ -1,0 +1,3 @@
+[submodule "dependencies/parsegar"]
+	path = dependencies/parsegar
+	url = https://github.com/Zheoni/parsegar

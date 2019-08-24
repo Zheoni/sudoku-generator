@@ -6,6 +6,8 @@
 #include <cstring>
 #include <thread>
 
+#include <parsegar/parsegar.hpp>
+
 #define EASY 25
 #define MEDIUM 35
 #define HARD 50
@@ -227,32 +229,56 @@ std::string boardString(const std::array<unsigned short, 81>& board) {
     return str;
 }
 
+void printHelp(std::ostream& os, const std::string& programName) {
+    os << "USAGE: " << programName << " [options]\n"
+       << "Options are:\n"
+       << "\t-n <N> : Generate N puzzles (default 1)\n"
+       << "\t-d <D> : The puzzles have D empty cells (default 35)\n"
+       << "\t-u : DO NOT Require the puzzles to have an unique solution\n"
+       << "\t-s : DO NOT Show the solutions of the puzzles\n";
+}
+
 int main(int argc, const char** argv) {
-    int N = 1, difficulty = MEDIUM;
-    bool showSolutions = true, unique = true;
+    int N, difficulty;
+    bool showSolutions, unique;
 
     // parsing command line args
-    if (argc > 1) {
-        if (std::strcmp(argv[1], "--help") == 0 ||
-            std::strcmp(argv[1], "-help") == 0 ||
-            std::strcmp(argv[1], "-h") == 0) {
-            std::cout << "USAGE: " << argv[0] << " N D U S\nWhere:\n"
-                      << "\tN (number) : Generate N puzzles\n"
-                      << "\tD (number) : The puzzles have D empty cells\n"
-                      << "\tU (1 or 0) : Require the puzzles to have an unique "
-                         "solution\n"
-                      << "\tS (1 or 0) : Show the solutions of the puzzles\n";
+    argsConfig config;
+    config.addFlag("-h");
+    config.addFlag("--help");
+    config.addFlag("-s");
+    config.addFlag("-u");
+    config.addArgument("-d");
+    config.addArgument("-n");
+
+    try {
+        argsParser parser(config, argc, argv);
+
+        if (parser.getFlag("-h") || parser.getFlag("--help")) {
+            printHelp(std::cout, argv[0]);
             return 0;
         }
-        if (argc != 5) {
-            std::cerr << "Use --help to see the usage." << std::endl;
-            return 1;
+
+        showSolutions = !parser.getFlag("-s");
+        unique = !parser.getFlag("-u");
+        std::string nStr = parser.getArgument("-n");
+        if (!nStr.empty()) {
+            N = std::stoi(nStr);
         } else {
-            N = std::stoi(argv[1]);
-            difficulty = std::stoi(argv[2]);
-            unique = std::stoi(argv[3]);
-            showSolutions = std::stoi(argv[4]);
+            N = 1;
         }
+
+        nStr = parser.getArgument("-d");
+        if (!nStr.empty()) {
+            difficulty = std::stoi(nStr);
+        } else {
+            difficulty = MEDIUM;
+        }
+
+    } catch (const std::runtime_error& e) {
+        std::cerr << e.what() << '\n';
+        printHelp(std::cout, argv[0]);
+        return 1;
     }
 
     // random seed for std::random_shuffle

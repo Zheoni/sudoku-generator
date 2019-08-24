@@ -2,10 +2,11 @@
 
 This program generate a sudoku and a solution for it. You can specify
 options:
-    -The number of sudokus to generate
-    -Show or not the solutions
-    -Force a puzzle to have an unique solution
-    -The number of empty cells to have
+
+- The number of sudokus to generate
+- Show or not the solutions
+- Force a puzzle to have an unique solution
+- The number of empty cells to have
 
 There is also a function you can use to just solve a sudoku called `solveBoard`.
 
@@ -18,7 +19,15 @@ the solution.
 You can add edit all of this (but you have to specify all of
 them).  
 
-`genSudoku [Number of sudokus] [empty cells] [unique solution] [show solutions]`
+`./genSudoku [options]`  
+
+Options are:  
+-n \<N> : Generate N puzzles  
+-d \<D> : The puzzles have D empty cells  
+-u : DO NOT Require the puzzles to have an unique solution  
+-s : DO NOT Show the solutions of the puzzles
+
+You can see this in the program with `-h` or `--help` arguments too.
 
 ## Procedure
 
