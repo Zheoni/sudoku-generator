@@ -8,13 +8,17 @@ VPATH = $(DEPENDENCIESDIR)/parsegar
 CXXFLAGS = -std=$(STD) -O3
 CPPFLAGS = -I$(DEPENDENCIESDIR)
 
+OBJS = parsegar.o
+EXES = sudoku
 
-all: sudoku.cpp parsegar.o
-	$(CXX) $^ $(CXXFLAGS) $(CPPFLAGS) -o genSudoku
-	./genSudoku --help
+all: $(EXES)
+	./sudoku --help
 
-parsegar.o: parsegar.cpp
+$(EXES): $(OBJS)
 
-.PHONY: clean
+$(OBJS):
+
 clean:
-	rm genSudoku parsegar.o
+	$(RM) $(OBJS) $(EXES)
+
+.PHONY: clean all

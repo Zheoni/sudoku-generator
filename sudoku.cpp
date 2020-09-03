@@ -234,21 +234,23 @@ void printHelp(std::ostream& os, const std::string& programName) {
        << "Options are:\n"
        << "\t-n <N> : Generate N puzzles (default 1)\n"
        << "\t-d <D> : The puzzles have D empty cells (default 35)\n"
-       << "\t-u : DO NOT Require the puzzles to have an unique solution\n"
-       << "\t-s : DO NOT Show the solutions of the puzzles\n"
-       << "\t--solve <board string> : solves the sudoku.";
+       << "\t-U : DO NOT require the puzzles to have an unique solution\n"
+       << "\t-S : DO NOT show the solutions of the puzzles\n"
+       << "\t-B : DO NOT show the board string\n"
+       << "\t--solve <board string> : solves the sudoku.\n";
 }
 
 int main(int argc, const char** argv) {
     int N, difficulty;
-    bool showSolutions, unique;
+    bool showSolutions, unique, showBoardString;
 
     // parsing command line args
     argsConfig config;
     config.addFlag("-h");
     config.addFlag("--help");
-    config.addFlag("-s");
-    config.addFlag("-u");
+    config.addFlag("-S");
+    config.addFlag("-U");
+    config.addFlag("-B");
     config.addArgument("-d");
     config.addArgument("-n");
     config.addArgument("--solve");
@@ -284,8 +286,9 @@ int main(int argc, const char** argv) {
             return 0;
         }
 
-        showSolutions = !parser.getFlag("-s");
-        unique = !parser.getFlag("-u");
+        showSolutions = !parser.getFlag("-S");
+        showBoardString = !parser.getFlag("-B");
+        unique = !parser.getFlag("-U");
         std::string nStr = parser.getArgument("-n");
         if (!nStr.empty()) {
             N = std::stoi(nStr);
@@ -321,5 +324,25 @@ int main(int argc, const char** argv) {
         ths[i].join();
     }
     // printing results
-    return 0;
+    for (int i = 0; i < N; ++i) {
+        if (N > 1) std::cout << "Puzzle " << i + 1 << std::endl;
+
+        sudoku& s = sudokus[i];
+
+        printBoard(s.puzzle);
+        std::cout << std::endl;
+
+        if (showSolutions) {
+            printBoard(s.solution);
+            std::cout << std::endl;
+        }
+
+        if (showBoardString)
+            std::cout << boardString(s.puzzle) << std::endl;
+        std::cout << std::endl;
+
+        if (i != N - 1) {
+            std::cout << std::string(25, '-') << std::endl;
+        }
+    }
 }

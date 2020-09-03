@@ -19,13 +19,14 @@ the solution.
 You can add edit all of this (but you have to specify all of
 them).  
 
-`./genSudoku [options]`  
+`./sudoku [options]`  
 
 Options are:  
 -n \<N> : Generate N puzzles  
 -d \<D> : The puzzles have D empty cells  
--u : DO NOT Require the puzzles to have an unique solution  
--s : DO NOT Show the solutions of the puzzles
+-U : DO NOT require the puzzles to have an unique solution  
+-S : DO NOT show the solutions of the puzzles
+-B : DO NOT show the board string
 
 You can see this in the program with `-h` or `--help` arguments too.
 
