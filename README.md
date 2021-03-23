@@ -1,5 +1,11 @@
 # SUDOKU GENERATOR
 
+## Another similar but more capable version
+
+[https://github.com/Zheoni/sudoku](https://github.com/Zheoni/sudoku)
+
+---
+
 This program generate a sudoku and a solution for it. You can specify
 options:
 
